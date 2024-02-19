@@ -9,9 +9,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter // 엔티티 출력이 가능하게 구현된다 @NoArgsConstructor//엔티티 생성자를 자동으로 추가한다
 @Entity // 엔티티와 매핑되는 저장소를 만든다
+@NoArgsConstructor//엔티티 생성자를 자동으로 추가한다
 public class Posts extends BaseTimeEntity {
 	@Id // 주키 Primary Key 로 만든다
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // 자동증가값으로 구현한다
