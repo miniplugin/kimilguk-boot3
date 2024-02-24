@@ -21,6 +21,12 @@ public class IndexController {
 	//로그 출력 객체생성
     private Logger logger = LoggerFactory.getLogger(getClass());
     private final PostsService postsService;//생성자로 주입
+    
+    @GetMapping("/posts/save")//Url주소와 posts-save.mustache를 매핑 시킨다.
+    public String postsSave() {
+        return "posts/posts-save";
+    }
+    
     @GetMapping("/")//전체게시물 Read
     public String postList(@PageableDefault(size=5,sort="id",direction=Sort.Direction.DESC) Pageable pageable, Model model) {
     Page<Posts> postsList = postsService.postsList(pageable);
