@@ -1,0 +1,46 @@
+{{>layout/header}}
+<!-- 게시글 수정내용이 들어갈 자리 -->
+<h2>게시글 수정</h2>
+    <div class="col-md-12">
+        <form name="form-read" id="form_posts" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="title">글 번</label>
+                <input type="text" class="form-control" id="id" value="{{post.id}}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="title">제목</label>
+                <input type="text" class="form-control" id="title" value="{{post.title}}">
+            </div>
+            <div class="form-group">
+                <label for="author"> 작성자</label>
+                <input type="text" class="form-control" id="author" value="{{post.author}}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="content"> 내용</label>
+                <textarea class="form-control" id="content">{{post.content}}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="author"> 첨부파일</label>
+                {{#post.fileId}}
+                <a href="#"></a>
+                {{/post.fileId}}
+                {{^post.fileId}}<!-- 수정 시 첨부파일이 없을 때 처리에 필요해서 추가 이후 수업시간에 다룰 예정 이다. -->
+                <input type="hidden" name="file_id" id="file_id" value="">
+                {{/post.fileId}}
+            </div>
+            <a href="/" role="button" class="btn btn-secondary">취소</a>
+            <button type="button" class="btn btn-primary" id="btn-update">수정 완료</button>
+            <button type="button" class="btn btn-primary" id="btn-delete">삭제</button>
+        </form>
+    </div>
+    <script>
+	//첨부파일 디자인 처리 코딩
+	$("#customFile").on(
+			"change",
+			function() {
+				var fileName = $(this).val().split("\\").pop();
+				$(this).siblings(".custom-file-label").addClass("selected")
+						.html(fileName);
+			});
+	</script>
+{{>layout/footer}}
