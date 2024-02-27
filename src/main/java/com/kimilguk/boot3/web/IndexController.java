@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import com.kimilguk.boot3.domain.posts.Posts;
+import com.kimilguk.boot3.service.posts.FileService;
 import com.kimilguk.boot3.service.posts.PostsService;
+import com.kimilguk.boot3.web.dto.FileDto;
 import com.kimilguk.boot3.web.dto.PostsDto;
 
 import lombok.RequiredArgsConstructor;
@@ -22,14 +24,16 @@ import lombok.RequiredArgsConstructor;
 public class IndexController {
 	// 로그 출력 객체생성
 	private Logger logger = LoggerFactory.getLogger(getClass());
-	private final PostsService postsService;// 생성자로 주입
-
+	private final PostsService postsService;// 생성자로 객체 주입(예전에는 @Autowired를 사용 했었음)
+	private final FileService fileService;
 	@GetMapping("/posts/update/{id}")//패스경로에 id값이 들어갔다. @PathVariable 사용해서 id값을 자바코드에서 사용
     public String postsUpdate(@PathVariable Long id, Model model) {
         PostsDto dto = postsService.postsOne(id);//1개의 레코드만 가져온다.
         model.addAttribute("post",dto);//모델객체에 담아서 mustache로 보낸다.
         if(dto.getFileId() != null) {
-            //단일 첨부파일 처리는 이후 수업에서 작업예정 
+            //단일 첨부파일 처리는 이후 수업에서 작업예정
+            FileDto fileDto = fileService.getFile(dto.getFileId());
+            model.addAttribute("OrigFilename", fileDto.getOrigFilename());
         }
         return "posts/posts-update";
     }
@@ -40,6 +44,8 @@ public class IndexController {
 		model.addAttribute("post", dto);// 모델객체에 담아서 mustache로 보낸다.
 		if (dto.getFileId() != null) {
 			// 단일 첨부파일 처리는 이후 수업에서 작업예정
+			FileDto fileDto = fileService.getFile(dto.getFileId());
+	        model.addAttribute("OrigFilename", fileDto.getOrigFilename());
 		}
 		return "posts/posts-read";
 	}
