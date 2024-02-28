@@ -20,8 +20,13 @@
 			<textarea class="form-control" id="content">{{post.content}}</textarea>
 		</div>
 		<div class="form-group">
-			<label for="author"> 첨부파일</label> {{#post.fileId}} <a href="#"></a>
-			{{/post.fileId}} {{^post.fileId}}
+			<label for="author"> 첨부파일</label> 
+			{{#post.fileId}} 
+			<a href="/api/file_download/{{post.fileId}}">{{OrigFilename}}</a>
+            <button type="button" class="btn btn-danger" id="btn-delete-file">파일삭제</button>
+            <input type="hidden" name="file_id" id="file_id" value="{{post.fileId}}">
+			{{/post.fileId}} 
+			{{^post.fileId}}
 			<!-- 수정 시 첨부파일이 없을 때 처리에 필요해서 추가 이후 수업시간에 다룰 예정 이다. -->
 			<input type="hidden" name="file_id" id="file_id" value="">
 			{{/post.fileId}}

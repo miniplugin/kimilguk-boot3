@@ -8,7 +8,9 @@ var main = {
         })
         $('#btn-delete-file').on('click', function(){
             _this.deleteFile();
-            location.reload(true);
+            //location.reload(true);
+            //Posts테이블의 file_id 값도 수정해야 하기 때문에 아래 추가
+           _this.update();//파일 삭제 후 현재페이지를 업데이트 한다
         })
         $('#btn-save').on('click', function(){
             _this.save();
@@ -89,37 +91,37 @@ var main = {
             contentType: 'application/json; charset=utf-8',
         }).done(function(result){
             $("#file_id").val("");
-            alert('첨부파일 삭제 성공 ' +  result.success);
+            alert('첨부파일 삭제 성공 ' +  result.success);//FileUtilsApi.java 의 jsonResult.put("success", "OK");에서 입력한 OK가 출력된다.
         }).fail(function(error){
-            alert('첨부파일 삭제 실패 ' + JSON.stringify(error));
+            alert('첨부파일 삭제 실패 ' + JSON.stringify(error));//stringify함수는 json 객체를 문자열로 변경한다.
         });
     },
     saveFile : function() {
         var _this = this;
-        var form = $('#form_posts')[0];
-        var formData = new FormData(form);
+        var form = $('#form_posts')[0];//첫 번째 입력 폼 객체 선언
+        var formData = new FormData(form);//폼의 첨부파일 입력 데이터 객체 생성
         $.ajax({
             async: false,//게시물 등록시 첨부파일은 비동기에서 동기로 바꿔야지만, 업로드 후 게시물이 저장됩니다.
             type: "POST",
-            enctype: 'multipart/form-data',
+            enctype: 'multipart/form-data',//전송타입을 분할 폼 데이터로 지정
             url: "/api/file_upload",
             data: formData,
-            processData: false,//formData 를 QueryString 으로 변환하지 않는다.
+            processData: false,//formData 를 QueryString 으로 변환하지 않는다.스트림형태이기 때문에
             contentType: false,//multipart/form-data; boundary=----WebKitFormBoundaryzS65BXVvgmggfL5A
-            cache: false,
-            timeout: 600000,
-            dataType: 'json',
+            cache: false, //캐시라는 임시저장소도 사용하지 않는다.
+            timeout: 600000, //대기시간 단위 밀리초=600초=10분 동안 업로드 시간을 부여한다.
+            dataType: 'json', //응답 받는 데이터 형태지정
             beforeSend:function(){
-                //이미지 보여주기 처리
+                //이미지 보여주기 처리, 현재는 동기처리이기 때문에 의미가 없다.
                 $('.wrap-loading').removeClass('display-none');
             },
             complete:function(){
-                //이미지 숨김 처리
+                //이미지 숨김 처리, 현재는 동기처리이기 때문에 의미가 없다.
                 $('.wrap-loading').removeClass('display-none');
             },
             success: function (result) {
-                alert("첨부파일 OK : " + result);
-                $("#file_id").val(result);
+                alert("첨부파일 OK : " + result); //성공 후 응답 받은 파일 id 값을 출력한다.
+                $("#file_id").val(result); //파일 id 값을 input 태그의 값으로 저장한다.
             },
             //complete: _this.save,
             error: function (e) {
